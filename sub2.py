@@ -17,17 +17,16 @@ def on_message(client, userdata, message):
     print(
         f"Received message on topic {message.topic}: {message.payload.decode()}")
     recv_json = json.loads(message.payload.decode())
-    print(recv_json)
     recv_id = recv_json["toilet_id"]
     insert_doc = current_collection.find_one({"toilet_id": recv_id})
     if not insert_doc:
         # not found
-        print('not found')
         current_collection.insert_one(recv_json)
+        print(f'insert a new document: {recv_json}')
     else:
         current_collection.update_one(
             {"toilet_id": recv_id}, {"$set": recv_json})
-        print('updated')
+        print(f'update document: {recv_json}')
     # print(insert_doc)
 
 
