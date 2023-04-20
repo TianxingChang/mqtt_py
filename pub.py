@@ -32,8 +32,8 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
     while True:
-        time.sleep(1)
-        msg = f"messages: {msg_count}"
+        time.sleep(2)
+        msg = '{"toilet_id":1, "people":"no"}'
         result = client.publish(topic, msg)
         # result: [0, 1]
         status = result[0]
