@@ -2,6 +2,7 @@
 
 import random
 import time
+import json
 
 from paho.mqtt import client as mqtt_client
 
@@ -32,13 +33,21 @@ def connect_mqtt():
 def publish(client):
     msg_count = 0
     while True:
-        time.sleep(2)
-        msg = '{"toilet_id":1, "people":"no"}'
-        result = client.publish(topic, msg)
+        time.sleep(5)
+        json_msg = [
+            {"toilet_id": 3, "avail_num": 3, "people_num": 5,
+                "cub_status": [[3, True], [0, False], [1, True]]},
+            {"toilet_id": 4, "avail_num": 3, "people_num": 5,
+                "cub_status": [[3, True], [0, False], [1, True]]},
+            {"toilet_id": 5, "avail_num": 3, "people_num": 5,
+                "cub_status": [[3, True], [0, False], [1, True]]}
+        ]
+        for package in json_msg:
+            result = client.publish(topic, json.dumps(package))
         # result: [0, 1]
         status = result[0]
         if status == 0:
-            print(f"Send `{msg}` to topic `{topic}`")
+            print(f"Send `{json_msg}` to topic `{topic}`")
         else:
             print(f"Failed to send message to topic {topic}")
         msg_count += 1
